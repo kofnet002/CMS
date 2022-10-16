@@ -7,14 +7,7 @@ import APIServices from "../APIServices";
 
 const Members = () => {
   const [members, setMembers] = React.useState([]);
-
-  const handleDelete = (id) => {
-    if (window.confirm("Are you sure ?")) {
-      APIServices.DeleteMember(id);
-      alert("Deleted successfully");
-    }
-  };
-
+  // Fetching data from the backend
   useEffect(() => {
     fetch("/api/members/", {
       method: "GET",
@@ -26,6 +19,43 @@ const Members = () => {
       .then((resp) => setMembers(resp))
       .catch((error) => console.log(error));
   }, []);
+
+  //  AUTOMATICALLY UPDATING THE UI
+  // Updating updated information by comparing the id of the updated member with that
+  //  of the fetched member data in the frontend
+  const updatedMemberInformation = (updateInfo) => {
+    const updatedMember = members.map((member) => {
+      if (member.id === updateInfo.id) {
+        return updateInfo;
+      } else {
+        return member;
+      }
+    });
+    setMembers(updatedMember);
+  };
+
+  // Automatically updating members after adding a new member
+  const insertedMemberUpdate = (member) => {
+    const newMember = [...members, member];
+    setMembers(newMember);
+  };
+
+  // Automatically updating members after deleting a member
+  const deleteUpdate = (id) => {
+    const deleteMember = members.filter((member) => member.id !== id);
+    setMembers(deleteMember);
+  };
+
+  // Handling delete function
+  const handleDelete = (id) => {
+    if (window.confirm("Are you sure ?")) {
+      APIServices.DeleteMember(id)
+        .then(() => deleteUpdate(id))
+        .then((resp) => alert("Deleted successfully"))
+        .catch((error) => console.log(error));
+    }
+  };
+
   return (
     <>
       <section className="container my-3">
@@ -58,7 +88,7 @@ const Members = () => {
           <div className="card-body all-members-table">
             <div className="mb-5 d-flex justify-content-between align-items-center">
               <h2>ALL MEMBERS</h2>
-              <AddMemberModal />
+              <AddMemberModal insertedMemberUpdate={insertedMemberUpdate} />
             </div>
             <table className="shadow-lg p-3 bg-body rounded table table-md table-hover table-striped table-responsive-sm">
               <thead className="table-dark">
@@ -77,9 +107,9 @@ const Members = () => {
                 </tr>
               </thead>
               <tbody>
-                {members.map((data, index) => {
+                {members.map((data) => {
                   return (
-                    <tr key={index}>
+                    <tr key={data.id}>
                       <td>{data.id}</td>
                       <td>{data.first_name}</td>
                       <td>{data.middle_name}</td>
@@ -91,11 +121,11 @@ const Members = () => {
                       <td>{data.emergency_contact_person}</td>
                       <td>0{data.emergency_contact_number}</td>
                       <td>
-                        {/* <i onClick={() => handleUpdate(data)}>
-                          <EditMemberModal member={data} />
-                        </i> */}
                         <i className="edit">
-                          <EditMemberModal member={data} />
+                          <EditMemberModal
+                            member={data}
+                            updatedMemberInformation={updatedMemberInformation}
+                          />
                         </i>
                         <i
                           className="delete"

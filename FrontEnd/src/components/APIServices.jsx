@@ -1,4 +1,3 @@
-
 export default class APIServices {
   static UpdateMember(id, body) {
     return fetch(`http://localhost:8000/api/members/${id}/`, {

@@ -6,7 +6,7 @@ import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import APIServices from "../APIServices";
 
-export default function EditMemberModal({ member }) {
+export default function EditMemberModal({ member, updatedMemberInformation }) {
   const [show, setShow] = useState(false);
   const [person, setPerson] = useState({
     firstName: member.first_name,
@@ -55,7 +55,9 @@ export default function EditMemberModal({ member }) {
       church_of_baptism: person.churchOfBaptism,
       emergency_contact_person: person.emergencyContactPerson,
       emergency_contact_number: person.emergencyContactNumber,
-    }).then((resp) => alert("Updated successfully"));
+    })
+    .then((resp) => updatedMemberInformation(resp))
+    .then((resp) => alert("Updated successfully"));
   };
   return (
     <>
