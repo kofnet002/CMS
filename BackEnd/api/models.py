@@ -47,7 +47,7 @@ class Member(models.Model):
     date_of_birth = models.DateField(null=True)
     marital_status = models.CharField(choices=Marriage_Type, default='', max_length=10)
     name_of_spouse = models.CharField(max_length=50, blank=True, null=True, default='')
-    phone_number_of_spouse = models.IntegerField(null=True, blank=True, default=1)
+    phone_number_of_spouse = models.CharField(max_length=10, null=True, blank=True, default=1)
     baptism = models.CharField(choices=Baptism_Type, max_length=10)
     church_of_baptism = models.CharField(max_length=70, blank=True, null=True)
     emergency_contact_person = models.CharField(max_length=50, null=True)

@@ -109,9 +109,9 @@
     align-items: center;
 }
 
-span{
+/* span{
     margin-left: 16px;
-}
+} */
 
 /*  Members */
 .avatar{
@@ -145,4 +145,24 @@ i:hover{
 
 .modalTitle{
     color:white;
+}
+
+small{
+    color: red;
+    font-weight: bolder;
+}
+
+span{
+    color: rgb(151, 32, 32);
+    font-size: 12px;
+    padding: 3px;
+    display: none;;
+}
+
+input:invalid{
+    border:1px solid red;
+}
+
+input:invalid ~ span{
+    display: block;
 }

@@ -6,9 +6,10 @@ import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import APIServices from "../APIServices";
 
-export default function AddMemberModal({ insertedMemberUpdate }) {
+export default function AddMemberModal({ validateForm, insertedMemberUpdate }) {
   const [show, setShow] = useState(false);
   const handleShow = () => setShow(!show);
+
   const [person, setPerson] = useState({
     firstName: "",
     middleName: "",
@@ -37,48 +38,52 @@ export default function AddMemberModal({ insertedMemberUpdate }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    APIServices.InsertMember({
-      id: null,
-      first_name: person.firstName,
-      middle_name: person.middleName,
-      last_name: person.lastName,
-      age: person.age,
-      gender: person.gender,
-      resident: person.resident,
-      occupation: person.occupation,
-      mobile_number: person.mobileNumber,
-      registration_date: person.dateOfRegistration,
-      date_of_birth: person.dateOfBirth,
-      marital_status: person.maritalStatus,
-      name_of_spouse: person.nameOfSpouse,
-      phone_number_of_spouse: person.phoneNumberOfSpouse,
-      baptism: person.baptism,
-      church_of_baptism: person.churchOfBaptism,
-      emergency_contact_person: person.emergencyContactPerson,
-      emergency_contact_number: person.emergencyContactNumber,
-    })
-      .then((resp) => insertedMemberUpdate(resp))
-      .then((resp) => alert("Member added successfully"));
-    
+    if (person.firstName && person.lastName) {
+      APIServices.InsertMember({
+        id: null,
+        first_name: person.firstName,
+        middle_name: person.middleName,
+        last_name: person.lastName,
+        age: person.age,
+        gender: person.gender,
+        resident: person.resident,
+        occupation: person.occupation,
+        mobile_number: person.mobileNumber,
+        registration_date: person.dateOfRegistration,
+        date_of_birth: person.dateOfBirth,
+        marital_status: person.maritalStatus,
+        name_of_spouse: person.nameOfSpouse,
+        phone_number_of_spouse: person.phoneNumberOfSpouse,
+        baptism: person.baptism,
+        church_of_baptism: person.churchOfBaptism,
+        emergency_contact_person: person.emergencyContactPerson,
+        emergency_contact_number: person.emergencyContactNumber,
+      })
+        .then((resp) => insertedMemberUpdate(resp))
+        .then((resp) => alert("Member added successfully"));
+
       setPerson({
-      firstName: "",
-      middleName: "",
-      lastName: "",
-      age: "",
-      gender: "",
-      resident: "",
-      occupation: "",
-      mobileNumber: "",
-      dateOfRegistration: "",
-      dateOfBirth: "",
-      maritalStatus: "",
-      nameOfSpouse: "",
-      phoneNumberOfSpouse: "",
-      baptism: "",
-      churchOfBaptism: "",
-      emergencyContactPerson: "",
-      emergencyContactNumber: "",
-    });
+        firstName: "",
+        middleName: "",
+        lastName: "",
+        age: "",
+        gender: "",
+        resident: "",
+        occupation: "",
+        mobileNumber: "",
+        dateOfRegistration: "",
+        dateOfBirth: "",
+        maritalStatus: "",
+        nameOfSpouse: "",
+        phoneNumberOfSpouse: "",
+        baptism: "",
+        churchOfBaptism: "",
+        emergencyContactPerson: "",
+        emergencyContactNumber: "",
+      });
+    } else {
+      alert("Please input valid data");
+    }
   };
   return (
     <>
@@ -95,7 +100,9 @@ export default function AddMemberModal({ insertedMemberUpdate }) {
           <Form>
             <Row className="mb-3">
               <Col>
-                <Form.Label>First Name</Form.Label>
+                <Form.Label>
+                  First Name <small>*</small>
+                </Form.Label>
                 <Form.Control
                   sm={12}
                   type="text"
@@ -104,7 +111,9 @@ export default function AddMemberModal({ insertedMemberUpdate }) {
                   name="firstName"
                   value={person.firstName}
                   onChange={handleOnChange}
+                  pattern="^[a-zA-Z]{3,10}$"
                 />
+                <span>{validateForm.nameErrorMessage}</span>
               </Col>
               <Col>
                 <Form.Label>Middle Name</Form.Label>
@@ -119,7 +128,9 @@ export default function AddMemberModal({ insertedMemberUpdate }) {
                 />
               </Col>
               <Col>
-                <Form.Label>Last Name</Form.Label>
+                <Form.Label>
+                  Last Name <small>*</small>
+                </Form.Label>
                 <Form.Control
                   sm={12}
                   type="text"
@@ -128,12 +139,17 @@ export default function AddMemberModal({ insertedMemberUpdate }) {
                   name="lastName"
                   value={person.lastName}
                   onChange={handleOnChange}
+                   
+                  pattern="^[A-Za-z]{3,10}$"
                 />
+                <span>{validateForm.nameErrorMessage}</span>
               </Col>
             </Row>
             <Row className="mb-3">
               <Col>
-                <Form.Label>Age</Form.Label>
+                <Form.Label>
+                  Age <small>*</small>
+                </Form.Label>
                 <Form.Control
                   type="number"
                   placeholder="Age"
@@ -144,7 +160,9 @@ export default function AddMemberModal({ insertedMemberUpdate }) {
                 />
               </Col>
               <Col>
-                <Form.Label>Gender</Form.Label>
+                <Form.Label>
+                  Gender <small>*</small>
+                </Form.Label>
                 <Form.Select
                   type="select"
                   placeholder="Marital Status"
@@ -162,7 +180,9 @@ export default function AddMemberModal({ insertedMemberUpdate }) {
                 </Form.Select>
               </Col>
               <Col>
-                <Form.Label>Resident</Form.Label>
+                <Form.Label>
+                  Resident <small>*</small>
+                </Form.Label>
                 <Form.Control
                   type="text"
                   placeholder="Resident"
@@ -170,12 +190,17 @@ export default function AddMemberModal({ insertedMemberUpdate }) {
                   name="resident"
                   value={person.resident}
                   onChange={handleOnChange}
+                   
+                  pattern="^[A-Za-z0-9]{1,20}$"
                 />
+                <span>{validateForm.residentErrorMessage}</span>
               </Col>
             </Row>
             <Row className="mb-3">
               <Col>
-                <Form.Label>Occupation</Form.Label>
+                <Form.Label>
+                  Occupation <small>*</small>
+                </Form.Label>
                 <Form.Control
                   type="text"
                   placeholder="Eg. Doctor"
@@ -183,10 +208,15 @@ export default function AddMemberModal({ insertedMemberUpdate }) {
                   name="occupation"
                   value={person.occupation}
                   onChange={handleOnChange}
+                   
+                  pattern="^[A-Za-z0-9]{1,50}"
                 />
+                <span>{validateForm.occupationErrorMessage}</span>
               </Col>
               <Col>
-                <Form.Label>Mobile Number</Form.Label>
+                <Form.Label>
+                  Mobile Number <small>*</small>
+                </Form.Label>
                 <Form.Control
                   type="number"
                   placeholder="0544636910"
@@ -194,10 +224,15 @@ export default function AddMemberModal({ insertedMemberUpdate }) {
                   name="mobileNumber"
                   value={person.mobileNumber}
                   onChange={handleOnChange}
+                   
+                  pattern="^[0-9]{1,10}$"
                 />
+                <span>{validateForm.numberErrorMessage}</span>
               </Col>
-              <Col sm={8}>
-                <Form.Label>Date of Registration</Form.Label>
+              <Col>
+                <Form.Label>
+                  Date of Registration <small>*</small>
+                </Form.Label>
                 <Form.Control
                   type="date"
                   placeholder="Registration Date"
@@ -210,7 +245,9 @@ export default function AddMemberModal({ insertedMemberUpdate }) {
             </Row>
             <Row className="mb-3">
               <Col>
-                <Form.Label>Date of Birth</Form.Label>
+                <Form.Label>
+                  Date of Birth <small>*</small>
+                </Form.Label>
                 <Form.Control
                   type="date"
                   placeholder="Date of Birth"
@@ -221,7 +258,9 @@ export default function AddMemberModal({ insertedMemberUpdate }) {
                 />
               </Col>
               <Col>
-                <Form.Label>Marital Status</Form.Label>
+                <Form.Label>
+                  Marital Status <small>*</small>
+                </Form.Label>
                 <Form.Select
                   type="select"
                   placeholder="Marital Status"
@@ -244,21 +283,24 @@ export default function AddMemberModal({ insertedMemberUpdate }) {
             </Row>
             <Row className="mb-3">
               <Col>
-                <Form.Label>Name of spouse</Form.Label>
+                <Form.Label>Name of spouse, if married</Form.Label>
                 <Form.Control
                   type="text"
-                  placeholder="Frimpong"
+                  placeholder="Dr/Mr/Mrs/Ms Frimpong"
                   id="nameOfSpouse"
                   name="nameOfSpouse"
                   value={person.nameOfSpouse}
                   onChange={handleOnChange}
+                   
+                  pattern="^[a-zA-Z]{7,40}$"
                 />
+                <span>{validateForm.spouseErrorMessage}</span>
               </Col>
               <Col>
                 <Form.Label>Number of spouse</Form.Label>
                 <Form.Control
                   type="number"
-                  placeholder="Enter 0 if none"
+                  placeholder="0544636910"
                   id="phoneNumberOfSpouse"
                   name="phoneNumberOfSpouse"
                   value={person.phoneNumberOfSpouse}
@@ -268,7 +310,9 @@ export default function AddMemberModal({ insertedMemberUpdate }) {
             </Row>
             <Row className="mb-3">
               <Col>
-                <Form.Label>Are you Baptised ?</Form.Label>
+                <Form.Label>
+                  Are you Baptised ? <small>*</small>
+                </Form.Label>
                 <Form.Select
                   type="select"
                   placeholder="Baptised"
@@ -287,7 +331,6 @@ export default function AddMemberModal({ insertedMemberUpdate }) {
               </Col>
               <Col>
                 <Form.Label>Church of Baptism, if yes</Form.Label>
-
                 <Form.Control
                   type="text"
                   placeholder="Church of Bapitsm"
@@ -295,23 +338,33 @@ export default function AddMemberModal({ insertedMemberUpdate }) {
                   name="churchOfBaptism"
                   value={person.churchOfBaptism}
                   onChange={handleOnChange}
+                   
+                  pattern="^[A-Za-z]{1,30}$"
                 />
+                <span>{validateForm.churchErrorMessage}</span>
               </Col>
             </Row>
             <Row className="mb-3">
               <Col>
-                <Form.Label>Emergency Contact Person</Form.Label>
+                <Form.Label>
+                  Emergency Contact Person <small>*</small>
+                </Form.Label>
                 <Form.Control
                   type="text"
-                  placeholder="Frimpong"
+                  placeholder="Dr/Mr/Mrs/Ms Frimpong"
                   id="emergencyContactPerson"
                   name="emergencyContactPerson"
                   value={person.emergencyContactPerson}
                   onChange={handleOnChange}
+                   
+                  pattern="^[a-zA-Z]{7,40}$"
                 />
+                <span>{validateForm.emergencyPersonErrorMessage}</span>
               </Col>
               <Col>
-                <Form.Label>Emergency Contact Number</Form.Label>
+                <Form.Label>
+                  Emergency Contact Number <small>*</small>
+                </Form.Label>
                 <Form.Control
                   type="number"
                   placeholder="0544636910"
@@ -319,7 +372,10 @@ export default function AddMemberModal({ insertedMemberUpdate }) {
                   name="emergencyContactNumber"
                   value={person.emergencyContactNumber}
                   onChange={handleOnChange}
+                   
+                  pattern="^[0-9]{(1, 10)}$"
                 />
+                <span>{validateForm.numberErrorMessage}</span>
               </Col>
             </Row>
           </Form>

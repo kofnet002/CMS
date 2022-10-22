@@ -9,7 +9,7 @@ const Members = () => {
   const [members, setMembers] = React.useState([]);
   // Fetching data from the backend
   useEffect(() => {
-    fetch("/api/members/", {
+    fetch("http://localhost:8000/api/members/", {
       method: "GET",
       headers: {
         "Content-Type": "Application/json",
@@ -20,6 +20,23 @@ const Members = () => {
       .catch((error) => console.log(error));
   }, []);
 
+  // Handling user data input with error messages
+  const validateForm = {
+    nameErrorMessage:
+      "Should be at least 3-10 characters long and shouldn't contain any special characters!",
+    residentErrorMessage:
+      "Should be at least 20 characters long, no special characters!",
+    occupationErrorMessage:
+      "Should be at least 50 characters long, no special characters!",
+      numberErrorMessage:"Should be 10 characters long!",
+    spouseErrorMessage:
+      "Should be at least 7-40 characters long and shouldn't contain any special characters!",
+      churchErrorMessage: "Shouldn't contain any special characters!",
+      emergencyPersonErrorMessage:
+        "Should be at least 7-40 characters long and shouldn't contain any special characters!",
+  };
+
+  
   //  AUTOMATICALLY UPDATING THE UI
   // Updating updated information by comparing the id of the updated member with that
   //  of the fetched member data in the frontend
@@ -64,7 +81,7 @@ const Members = () => {
             const { avatar, text, number } = data;
             return (
               <>
-                <div className="col-md-3">
+                <div className="col-md-4">
                   <div className="card shadow mb-2 bg-body rounded">
                     <div className="card-body p-0">
                       <div className="d-flex justify-content-evenly align-items-center">
@@ -88,7 +105,10 @@ const Members = () => {
           <div className="card-body all-members-table">
             <div className="mb-5 d-flex justify-content-between align-items-center">
               <h2>ALL MEMBERS</h2>
-              <AddMemberModal insertedMemberUpdate={insertedMemberUpdate} />
+              <AddMemberModal
+                validateForm={validateForm}
+                insertedMemberUpdate={insertedMemberUpdate}
+              />
             </div>
             <table className="shadow-lg p-3 bg-body rounded table table-md table-hover table-striped table-responsive-sm">
               <thead className="table-dark">
