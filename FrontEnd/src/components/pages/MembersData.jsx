@@ -1,27 +1,25 @@
-import { FaUsers } from "react-icons/fa";
-import { FaMale } from "react-icons/fa";
-import { FaFemale } from "react-icons/fa";
-// import { FaChild } from "react-icons/fa";
+import React from 'react'
 
-export const MembersData = [
-  {
-    avatar: <FaMale />,
-    text: "Men",
-    number: 20,
-  },
-  {
-    avatar: <FaFemale />,
-    text: "Women",
-    number: 20,
-  },
-  {
-    avatar: <FaUsers />,
-    text: "All Members",
-    number: 20,
-  },
-  // {
-  //   avatar: <FaChild />,
-  //   text: "Children",
-  //   number: 20,
-  // },
-];
+const MembersData = ({avatar, text, number}) => {
+  return (
+    <div className="col-md-4">
+      <div className="card shadow mb-2 bg-body rounded">
+        <div className="card-body p-0">
+          <div className="d-flex justify-content-evenly align-items-center">
+            <div className="avatar">
+              {avatar}
+            </div>
+            <div>
+              <h4>
+                <b>{number}</b> {text}
+              </h4>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export default MembersData
+

@@ -33,7 +33,7 @@ const Sidebar = () => {
                 <li key={index} className={cName}>
                   <Link to={path} className="link">
                     {icon}
-                    <span>{title}</span>
+                    <h6>{title}</h6>
                     {/* <article>
                       {submenu.map((item, index) => {
                         const { title, path, icon, cName } = item;

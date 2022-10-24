@@ -5,8 +5,14 @@ import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import APIServices from "../APIServices";
+import Swal from "sweetalert2";
 
 export default function EditMemberModal({ member, updatedMemberInformation }) {
+  // SweetAlert for Updating a member profile
+  const updateAlert = () => {
+    Swal.fire("Updated Successfully!", "", "success");
+  };
+
   const [show, setShow] = useState(false);
   const [person, setPerson] = useState({
     firstName: member.first_name,
@@ -56,8 +62,8 @@ export default function EditMemberModal({ member, updatedMemberInformation }) {
       emergency_contact_person: person.emergencyContactPerson,
       emergency_contact_number: person.emergencyContactNumber,
     })
-    .then((resp) => updatedMemberInformation(resp))
-    .then((resp) => alert("Updated successfully"));
+      .then((resp) => updatedMemberInformation(resp))
+      .then((resp) => updateAlert());
   };
   return (
     <>

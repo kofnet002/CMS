@@ -1,12 +1,17 @@
 import React, { useEffect } from "react";
 import { FaTrash } from "react-icons/fa";
-import { MembersData } from "./MembersData";
+import MembersData from "./MembersData";
+import { FaUsers } from "react-icons/fa";
+import { FaMale } from "react-icons/fa";
+import { FaFemale } from "react-icons/fa";
 import AddMemberModal from "./AddMemberModal";
 import EditMemberModal from "./EditMemberModal";
 import APIServices from "../APIServices";
+import Swal from "sweetalert2";
 
 const Members = () => {
   const [members, setMembers] = React.useState([]);
+
   // Fetching data from the backend
   useEffect(() => {
     fetch("http://localhost:8000/api/members/", {
@@ -28,15 +33,14 @@ const Members = () => {
       "Should be at least 20 characters long, no special characters!",
     occupationErrorMessage:
       "Should be at least 50 characters long, no special characters!",
-      numberErrorMessage:"Should be 10 characters long!",
+    numberErrorMessage: "Should be 10 characters long!",
     spouseErrorMessage:
       "Should be at least 7-40 characters long and shouldn't contain any special characters!",
-      churchErrorMessage: "Shouldn't contain any special characters!",
-      emergencyPersonErrorMessage:
-        "Should be at least 7-40 characters long and shouldn't contain any special characters!",
+    churchErrorMessage: "Shouldn't contain any special characters!",
+    emergencyPersonErrorMessage:
+      "Should be at least 7-40 characters long and shouldn't contain any special characters!",
   };
 
-  
   //  AUTOMATICALLY UPDATING THE UI
   // Updating updated information by comparing the id of the updated member with that
   //  of the fetched member data in the frontend
@@ -63,43 +67,53 @@ const Members = () => {
     setMembers(deleteMember);
   };
 
-  // Handling delete function
+  // SweetAlert for Deletine member
   const handleDelete = (id) => {
-    if (window.confirm("Are you sure ?")) {
-      APIServices.DeleteMember(id)
-        .then(() => deleteUpdate(id))
-        .then((resp) => alert("Deleted successfully"))
-        .catch((error) => console.log(error));
-    }
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You won't be able to revert this!",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, delete it!",
+    }).then((result) => {
+      if (result.isConfirmed) {
+        APIServices.DeleteMember(id)
+          .then(() => deleteUpdate(id))
+          .catch((error) => console.log(error));
+        Swal.fire("Deleted!", "Profile has been deleted.", "success")
+      }
+    });
   };
+
+  // Total number of of males
+  const totalMales = members.filter((members) => members.gender === "Male")
+
+  // Total number of females
+  const totalFemales = members.filter((members) => members.gender === "Female")
 
   return (
     <>
-      <section className="container my-3">
+      <section className="container my-4">
         <div className="row">
-          {MembersData.map((data) => {
-            const { avatar, text, number } = data;
-            return (
-              <>
-                <div className="col-md-4">
-                  <div className="card shadow mb-2 bg-body rounded">
-                    <div className="card-body p-0">
-                      <div className="d-flex justify-content-evenly align-items-center">
-                        <div className="avatar">{avatar}</div>
-                        <div>
-                          <h4>{text}</h4>
-                          <h4>{number}</h4>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </>
-            );
-          })}
+          <MembersData
+            avatar={<FaMale />}
+            number={totalMales.length}
+            text="Males"
+          />
+          <MembersData
+            avatar={<FaFemale />}
+            number={totalFemales.length}
+            text="Females"
+          />
+          <MembersData
+            avatar={<FaUsers />}
+            number={members.length}
+            text="Members"
+          />
         </div>
       </section>
-
       <section className="container">
         <div className="card shadow p-3 mb-5 bg-body rounded">
           <div className="card-body all-members-table">

@@ -5,8 +5,23 @@ import Form from "react-bootstrap/Form";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import APIServices from "../APIServices";
+import Swal from "sweetalert2"
 
 export default function AddMemberModal({ validateForm, insertedMemberUpdate }) {
+  // SweetAlert for Adding a new member
+  const addAlert = () => {
+  Swal.fire("Success!", "Profile has been added.", "success");
+  };
+
+  // SweetAlert for invalid input data
+  const invalidAlert = () => {
+    Swal.fire({
+      icon: "error",
+      title: "Oops...",
+      text: "Please fill all data!",
+    });
+  };
+
   const [show, setShow] = useState(false);
   const handleShow = () => setShow(!show);
 
@@ -60,7 +75,7 @@ export default function AddMemberModal({ validateForm, insertedMemberUpdate }) {
         emergency_contact_number: person.emergencyContactNumber,
       })
         .then((resp) => insertedMemberUpdate(resp))
-        .then((resp) => alert("Member added successfully"));
+        .then((resp) => addAlert());
 
       setPerson({
         firstName: "",
@@ -82,7 +97,7 @@ export default function AddMemberModal({ validateForm, insertedMemberUpdate }) {
         emergencyContactNumber: "",
       });
     } else {
-      alert("Please input valid data");
+      invalidAlert();
     }
   };
   return (
@@ -125,7 +140,9 @@ export default function AddMemberModal({ validateForm, insertedMemberUpdate }) {
                   name="middleName"
                   value={person.middleName}
                   onChange={handleOnChange}
+                  pattern="^[a-zA-Z]{3,10}$"
                 />
+                <span>{validateForm.nameErrorMessage}</span>
               </Col>
               <Col>
                 <Form.Label>
@@ -139,7 +156,6 @@ export default function AddMemberModal({ validateForm, insertedMemberUpdate }) {
                   name="lastName"
                   value={person.lastName}
                   onChange={handleOnChange}
-                   
                   pattern="^[A-Za-z]{3,10}$"
                 />
                 <span>{validateForm.nameErrorMessage}</span>
@@ -190,7 +206,6 @@ export default function AddMemberModal({ validateForm, insertedMemberUpdate }) {
                   name="resident"
                   value={person.resident}
                   onChange={handleOnChange}
-                   
                   pattern="^[A-Za-z0-9]{1,20}$"
                 />
                 <span>{validateForm.residentErrorMessage}</span>
@@ -208,7 +223,6 @@ export default function AddMemberModal({ validateForm, insertedMemberUpdate }) {
                   name="occupation"
                   value={person.occupation}
                   onChange={handleOnChange}
-                   
                   pattern="^[A-Za-z0-9]{1,50}"
                 />
                 <span>{validateForm.occupationErrorMessage}</span>
@@ -224,7 +238,6 @@ export default function AddMemberModal({ validateForm, insertedMemberUpdate }) {
                   name="mobileNumber"
                   value={person.mobileNumber}
                   onChange={handleOnChange}
-                   
                   pattern="^[0-9]{1,10}$"
                 />
                 <span>{validateForm.numberErrorMessage}</span>
@@ -291,7 +304,6 @@ export default function AddMemberModal({ validateForm, insertedMemberUpdate }) {
                   name="nameOfSpouse"
                   value={person.nameOfSpouse}
                   onChange={handleOnChange}
-                   
                   pattern="^[a-zA-Z]{7,40}$"
                 />
                 <span>{validateForm.spouseErrorMessage}</span>
@@ -338,7 +350,6 @@ export default function AddMemberModal({ validateForm, insertedMemberUpdate }) {
                   name="churchOfBaptism"
                   value={person.churchOfBaptism}
                   onChange={handleOnChange}
-                   
                   pattern="^[A-Za-z]{1,30}$"
                 />
                 <span>{validateForm.churchErrorMessage}</span>
@@ -356,7 +367,6 @@ export default function AddMemberModal({ validateForm, insertedMemberUpdate }) {
                   name="emergencyContactPerson"
                   value={person.emergencyContactPerson}
                   onChange={handleOnChange}
-                   
                   pattern="^[a-zA-Z]{7,40}$"
                 />
                 <span>{validateForm.emergencyPersonErrorMessage}</span>
@@ -372,7 +382,6 @@ export default function AddMemberModal({ validateForm, insertedMemberUpdate }) {
                   name="emergencyContactNumber"
                   value={person.emergencyContactNumber}
                   onChange={handleOnChange}
-                   
                   pattern="^[0-9]{(1, 10)}$"
                 />
                 <span>{validateForm.numberErrorMessage}</span>
